@@ -16,6 +16,7 @@ const Homescreen = ({route, navigation}) => {
       hours: 0,
       minutes: parseInt(tokens[0]),
       seconds: 0,
+      interval: parseInt(tokens[1]),
     };
     console.log(hms);
     return hms;
@@ -25,6 +26,7 @@ const Homescreen = ({route, navigation}) => {
     hours: 0,
     minutes: 5,
     seconds: 0,
+    interval: 0,
   });
 
   useEffect(() => {
@@ -37,6 +39,9 @@ const Homescreen = ({route, navigation}) => {
       <TouchableOpacity
         style={styles.settings}
         onPress={() => {
+          setActive1(false);
+          setActive2(false);
+          setInitPress(true);
           navigation.navigate('Settings');
         }}
       />
@@ -61,6 +66,7 @@ const Homescreen = ({route, navigation}) => {
           hr={hms.hours}
           min={hms.minutes}
           sec={hms.seconds}
+          interval={hms.interval}
           active={active2}
         />
       </TouchableOpacity>
@@ -94,6 +100,7 @@ const Homescreen = ({route, navigation}) => {
           hr={hms.hours}
           min={hms.minutes}
           sec={hms.seconds}
+          interval={hms.interval}
           active={active1}
         />
       </TouchableOpacity>

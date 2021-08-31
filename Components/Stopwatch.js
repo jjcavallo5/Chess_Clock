@@ -12,6 +12,7 @@ const Stopwatch = props => {
     hr: formatString(props.hr),
     min: formatString(props.min),
     sec: formatString(props.sec),
+    interval: props.interval,
   });
 
   useEffect(() => {
@@ -19,8 +20,9 @@ const Stopwatch = props => {
       hr: formatString(props.hr),
       min: formatString(props.min),
       sec: formatString(props.sec),
+      interval: props.interval,
     });
-  }, [props]);
+  }, [props.min, props.interval]);
 
   const [clock, setClock] = useState(null);
 
@@ -29,14 +31,14 @@ const Stopwatch = props => {
     let min = Number(timer.min);
     let hr = Number(timer.hr);
     let clock = setInterval(() => {
-      if (min == 0 && sec == 0 && hr == 0) handleOutOfTime();
-
-      if (min == 0 && sec == 0) {
+      if (min == 0 && sec == 0 && hr == 0) {
+        clearInterval(clock);
+        handleOutOfTime();
+      } else if (min == 0 && sec == 0) {
         hr -= 1;
         min = 59;
         sec = 59;
-      }
-      if (sec == 0) {
+      } else if (sec == 0) {
         sec = 59;
         min -= 1;
       } else {
@@ -51,6 +53,16 @@ const Stopwatch = props => {
   };
 
   const handlePause = () => {
+    console.log(timer.interval);
+    let sec = Number(timer.sec);
+    let min = Number(timer.min);
+    if (sec + timer.interval > 59) {
+      sec = sec + timer.interval - 60;
+      min += 1;
+    } else {
+      sec = sec + timer.interval;
+    }
+    setTimer({...timer, sec: formatString(sec), min: formatString(min)});
     clearInterval(clock);
   };
 
@@ -60,7 +72,6 @@ const Stopwatch = props => {
   };
 
   useEffect(() => {
-    console.log(props.active);
     if (props.active) handleActivation();
     else handlePause();
   }, [props.active]);
