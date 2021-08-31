@@ -1,15 +1,46 @@
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import Stopwatch from '../Components/Stopwatch';
 
-const Homescreen = ({navigation}) => {
+const Homescreen = ({route, navigation}) => {
   const [active1, setActive1] = useState(false);
   const [active2, setActive2] = useState(false);
   const [initPress, setInitPress] = useState(true);
 
+  const getHMS = timeControl => {
+    console.log(timeControl);
+    let tokens = timeControl.split('|');
+
+    let hms = {
+      hours: 0,
+      minutes: parseInt(tokens[0]),
+      seconds: 0,
+    };
+    console.log(hms);
+    return hms;
+  };
+
+  const [hms, setHMS] = useState({
+    hours: 0,
+    minutes: 5,
+    seconds: 0,
+  });
+
+  useEffect(() => {
+    const timeControl = route.params ? route.params.timeControl : '5|0';
+    setHMS(getHMS(timeControl));
+  }, [route.params]);
+
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.settings}
+        onPress={() => {
+          navigation.navigate('Settings');
+        }}
+      />
+
       <TouchableOpacity
         style={[styles.clocks, {backgroundColor: 'blue'}]}
         onPress={() => {
@@ -27,9 +58,9 @@ const Homescreen = ({navigation}) => {
             fontSize: 60,
             transform: [{rotate: '180deg'}],
           }}
-          hr={0}
-          min={5}
-          sec={0}
+          hr={hms.hours}
+          min={hms.minutes}
+          sec={hms.seconds}
           active={active2}
         />
       </TouchableOpacity>
@@ -60,9 +91,9 @@ const Homescreen = ({navigation}) => {
             fontFamily: 'times new roman',
             fontSize: 60,
           }}
-          hr={0}
-          min={5}
-          sec={10}
+          hr={hms.hours}
+          min={hms.minutes}
+          sec={hms.seconds}
           active={active1}
         />
       </TouchableOpacity>
@@ -91,7 +122,7 @@ const styles = StyleSheet.create({
     top: '50%',
     left: '50%',
     transform: [{translateX: -25}, {translateY: -25}],
-    backgroundColor: 'green',
+    backgroundColor: 'lime',
     height: 50,
     width: 50,
     zIndex: 1,
@@ -99,5 +130,15 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  settings: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    backgroundColor: 'gray',
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+    zIndex: 1,
   },
 });

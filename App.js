@@ -13,6 +13,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import Homescreen from './Screens/Homescreen';
+import Settings from './Screens/Settings';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,7 @@ const App = () => {
           headerShown: false,
         }}>
         <Stack.Screen name="Home" component={Homescreen} />
+        <Stack.Screen name="Settings" component={Settings} />
       </Stack.Navigator>
     </NavigationContainer>
   );

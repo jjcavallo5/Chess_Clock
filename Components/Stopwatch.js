@@ -13,6 +13,15 @@ const Stopwatch = props => {
     min: formatString(props.min),
     sec: formatString(props.sec),
   });
+
+  useEffect(() => {
+    setTimer({
+      hr: formatString(props.hr),
+      min: formatString(props.min),
+      sec: formatString(props.sec),
+    });
+  }, [props]);
+
   const [clock, setClock] = useState(null);
 
   const handleActivation = () => {
