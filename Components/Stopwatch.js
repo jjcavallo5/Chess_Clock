@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View, Text, Alert} from 'react-native';
+import Sound from 'react-native-sound';
+Sound.setCategory('Playback');
+let alarm = new Sound('alarm.mp3', Sound.MAIN_BUNDLE, error => {
+  if (error) {
+    console.log('Failed to load alarm', error);
+    return;
+  }
+});
 
 const formatString = number => {
   let str = number.toString();
@@ -68,6 +76,13 @@ const Stopwatch = props => {
 
   //! =========
   const handleOutOfTime = () => {
+    alarm.play(success => {
+      if (success) {
+        console.log('Played alarm');
+      } else {
+        console.log('Failed to play alarm.');
+      }
+    });
     Alert.alert('Out of time');
   };
 
