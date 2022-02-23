@@ -1,4 +1,4 @@
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 
 import Stopwatch from '../Components/Stopwatch';
@@ -27,6 +27,7 @@ const Homescreen = ({route, navigation}) => {
     minutes: 5,
     seconds: 0,
     interval: 0,
+    reset: false,
   });
 
   useEffect(() => {
@@ -37,17 +38,7 @@ const Homescreen = ({route, navigation}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={styles.settings}
-        onPress={() => {
-          setActive1(false);
-          setActive2(false);
-          setInitPress(true);
-          navigation.navigate('Settings');
-        }}
-      />
-
-      <TouchableOpacity
-        style={[styles.clocks, {backgroundColor: 'blue'}]}
+        style={[styles.clocks, {backgroundColor: '#aa8351'}]}
         onPress={() => {
           if (initPress) {
             setActive1(!active1);
@@ -61,28 +52,54 @@ const Homescreen = ({route, navigation}) => {
           style={{
             fontFamily: 'times new roman',
             fontSize: 60,
+            fontWeight: 'bold',
             transform: [{rotate: '180deg'}],
+            color: '#251300',
           }}
           hr={hms.hours}
           min={hms.minutes}
           sec={hms.seconds}
           interval={hms.interval}
+          reset={hms.reset}
           active={active2}
         />
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.pause}
-        onPress={() => {
-          setActive1(false);
-          setActive2(false);
-          setInitPress(true);
-        }}>
-        <Text style={{fontSize: 20}}>ll</Text>
-      </TouchableOpacity>
+      <View style={styles.pause}>
+        <TouchableOpacity
+          onPress={() => {
+            setActive1(false);
+            setActive2(false);
+            setInitPress(true);
+          }}>
+          <Image source={require('../images/pause.png')} style={styles.icons} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{marginLeft: 10}}
+          onPress={() => {
+            setActive1(false);
+            setActive2(false);
+            setInitPress(true);
+            navigation.navigate('Settings');
+          }}>
+          <Image source={require('../images/clock.png')} style={styles.icons} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{marginLeft: 10}}
+          onPress={() => {
+            setActive1(false);
+            setActive2(false);
+            setInitPress(true);
+            const timeControl = route.params ? route.params.timeControl : '5|0';
+            setHMS(getHMS(timeControl));
+            setHMS({...hms, reset: !hms.reset});
+          }}>
+          <Image source={require('../images/reset.png')} style={styles.icons} />
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity
-        style={[styles.clocks, {backgroundColor: 'red'}]}
+        style={[styles.clocks, {backgroundColor: '#251300'}]}
         onPress={() => {
           if (initPress) {
             setActive2(!active2);
@@ -96,11 +113,14 @@ const Homescreen = ({route, navigation}) => {
           style={{
             fontFamily: 'times new roman',
             fontSize: 60,
+            color: '#fdf3c7',
+            fontWeight: 'bold',
           }}
           hr={hms.hours}
           min={hms.minutes}
           sec={hms.seconds}
           interval={hms.interval}
+          reset={hms.reset}
           active={active1}
         />
       </TouchableOpacity>
@@ -128,24 +148,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: [{translateX: -25}, {translateY: -25}],
-    backgroundColor: 'lime',
+    transform: [{translateX: -75}, {translateY: -25}],
+    backgroundColor: '#fdf3c7',
+    borderWidth: 5,
     height: 50,
-    width: 50,
+    width: 150,
     zIndex: 1,
     borderRadius: 25,
     display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  settings: {
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    backgroundColor: 'gray',
-    height: 40,
-    width: 40,
-    borderRadius: 20,
-    zIndex: 1,
+  icons: {
+    height: 25,
+    width: 25,
   },
 });

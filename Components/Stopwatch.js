@@ -22,7 +22,7 @@ const Stopwatch = props => {
       sec: formatString(props.sec),
       interval: props.interval,
     });
-  }, [props.min, props.interval]);
+  }, [props.min, props.interval, props.reset]);
 
   const [clock, setClock] = useState(null);
 
